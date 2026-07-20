@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ne" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>अधिराज Story</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="google" content="notranslate">
+    <link rel="apple-touch-icon" href="new-logo.png">
+    <style>
+        /* लोडिङ स्क्रिनको प्रिमियम र सफा डिजाइन */
+        #loadingScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease;
+        }
+        .loading-content { text-align: center; }
+        .progress-container {
+            width: 200px; height: 4px;
+            background: #444;
+            margin: 20px auto 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%; height: 100%;
+            background: #d32f2f;
+            animation: load 2s linear forwards;
+        }
+        @keyframes load { to { width: 100%; } }
+    </style>
+</head>
+<body class="day-mode">
+
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <h1 style="color: white; font-family: 'Georgia', serif; font-weight: 900; letter-spacing: 1px;">Aadhiraj Story</h1>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // प्रोग्रेस बार २ सेकेन्ड (2000ms) चल्छ र सकिने बित्तिकै सिधै होम पेजमा लैजान्छ
+        window.onload = () => {
+            setTimeout(() => {
+                const ls = document.getElementById('loadingScreen');
+                if (ls) {
+                    ls.style.opacity = '0'; // हल्का फेड-आउट एनिमेसन
+                    setTimeout(() => {
+                        window.location.href = "home.html"; // सिधै मुख्य डाइरीमा प्रवेश
+                    }, 400); // एनिमेसन फिनिस हुन दिने समय
+                }
+            }, 2000); // २ सेकेन्डको प्रोग्रेस बार टाइमर
+        };
+    </script>
+</body>
+</html>
