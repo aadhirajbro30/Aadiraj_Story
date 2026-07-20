@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ne" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>अधिराज Story</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="google" content="notranslate">
+</head>
+<body class="day-mode">
+
+    <div id="homePage">
+        <div class="sticky-header-container">
+            <header>
+                <div class="logo-text">✍🏻 अधिराज Story</div>
+            </header>
+
+            <nav class="tab-nav">
+                <div id="tab0" class="active" onclick="switchTab(0)">हिन्दी कथाहरू</div>
+                <div id="tab1" onclick="switchTab(1)">नेपाली कथाहरू</div>
+            </nav>
+        </div>
+
+        <div class="main-wrapper" id="contentWrapper">
+            
+            <!-- हिन्दी सेक्सन -->
+            <section id="hindiSection">
+                <div class="story-title-card" onclick="openStory('वियोग का सिन्दुर', 'h1')">
+                    <span class="badge">कहानी १</span>
+                    <h3>वियोग का सिन्दुर</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('गरीबी  और सपनों की नींव', 'h2')">
+                    <span class="badge">कहानी २</span>
+                    <h3>गरीबी और सपनों की नींव</h3>
+                </div>
+            </section>
+
+            <!-- नेपाली सेक्सन -->
+            <section id="nepaliSection">
+                <div class="story-title-card" onclick="openStory('वैवाहिक वेश्या', 'n1')">
+                    <span class="badge">कथा १</span>
+                    <h3>वैवाहिक वेश्या</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('अधुरो प्रतिज्ञा', 'n2')">
+                    <span class="badge">कथा २</span>
+                    <h3>अधुरो प्रतिज्ञा</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('दिदीको समर्पण', 'n3')">
+                    <span class="badge">कथा ३</span>
+                    <h3>दिदीको समर्पण</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('लालुङको याद', 'n4')">
+                    <span class="badge">कथा ४</span>
+                    <h3>लालुङको याद</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('बाजेको चिठी', 'n5')">
+                    <span class="badge">कथा ५</span>
+                    <h3>बाजेको चिठी</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('प्रतिज्ञा कि प्रतिक्षा', 'n6')">
+                    <span class="badge">कथा ६</span>
+                    <h3>प्रतिज्ञा कि प्रतिक्षा</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('प्रगतको मस्ती', 'n7')">
+                    <span class="badge">कथा ७</span>
+                    <h3>प्रगतको मस्ती</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('सपना यात्रा', 'n8')">
+                    <span class="badge">कथा ८</span>
+                    <h3>सपना यात्रा</h3>
+                </div>
+                <div class="story-title-card" onclick="openStory('निलो फूल', 'n9')">
+                    <span class="badge">कथा ९</span>
+                    <h3>निलो फूल</h3>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(index) {
+            const wrapper = document.getElementById('contentWrapper');
+            wrapper.style.transform = `translateX(-${index * 50}%)`;
+            document.querySelectorAll('.tab-nav div').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+        }
+
+        // नयाँ अपडेटेड फंक्शन: कथाको ID अनुसार सही एचटीएमएल पानामा रिडाइरेक्ट गर्ने
+        function openStory(title, id) {
+            console.log("कथा खोलियो: " + title + " (ID: " + id + ")");
+            
+            if (id.startsWith('h')) {
+                // हिन्दी कथा भएमा hindi-story.html मा ID पास गर्ने
+                window.location.href = `hindi-story.html?id=${id}`;
+            } else if (id.startsWith('n')) {
+                // नेपाली कथा भएमा nepali-story.html मा ID पास गर्ने
+                window.location.href = `nepali-story.html?id=${id}`;
+            }
+        }
+
+        // स्वाइपिङ कोड
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, false);
+        document.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].clientX;
+            let diff = touchStartX - touchEndX;
+            if (diff > 80) switchTab(1);  
+            if (diff < -80) switchTab(0); 
+        }, false);
+    </script>
+</body>
+</html>
