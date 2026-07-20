@@ -1,0 +1,184 @@
+/* style.css - अधिराज की डायरी 068 */
+
+/* Snickles फन्ट लोड गर्ने */
+@font-face {
+    font-family: 'Snickles';
+    src: url('Snickles.ttf');
+}
+
+/* root variables र basic styles */
+:root { 
+    --bg: #fcfbf7; 
+    --text: #333; 
+    --red: #d32f2f; 
+    --card-bg: #ffffff; 
+    --line: #ccc; 
+}
+
+.night-mode { 
+    --bg: #121212; 
+    --text: #e0e0e0; 
+    --red: #ff5252; 
+    --card-bg: #1e1e1e; 
+    --line: #444; 
+}
+
+/* मोबाइल एप जस्तै बनाउन बडीको स्क्रोल बन्द गरिएको */
+body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: 'Georgia', serif; 
+    margin: 0; 
+    padding: 0;
+    -webkit-user-select: none; 
+    user-select: none; 
+    transition: background 0.4s; 
+    line-height: 1.8;
+    height: 100vh;
+    overflow: hidden; /* बडीलाई हल्लिन नदिने */
+}
+
+.fade-out { opacity: 0; }
+
+/* मुख्य कन्टेनर - साइज अलि सानो र चिटिक्क ४५०px पारिएको */
+#homePage {
+    max-width: 450px; 
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column; /* हेडर माथि, कन्टेन्ट तल राख्न */
+    overflow: hidden;
+}
+
+/* --- हेडर कन्टेनर: यो जति स्क्रोल गरे पनि हल्लिँदैन, फिक्स बस्छ --- */
+.sticky-header-container {
+    background: var(--bg);
+    padding-top: 20px;
+    border-bottom: 2px solid var(--line);
+    transition: background 0.4s;
+    flex-shrink: 0; /* यसलाई थिचिन नदिने */
+    z-index: 1000;
+}
+
+header {
+    padding-bottom: 5px;
+}
+
+.logo-text {
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--text);
+    text-align: center;
+}
+
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 0;
+    padding: 10px 0 15px 0;
+}
+
+.tab-nav div {
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    color: var(--text);
+    opacity: 0.6;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.tab-nav div.active {
+    opacity: 1;
+    color: var(--red);
+    border-bottom: 3px solid var(--red);
+}
+
+/* --- मुख्य कन्टेन्ट एरिया: यहाँ मात्र स्क्रोल हुन्छ --- */
+.main-wrapper {
+    display: flex;
+    width: 200%;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    flex-grow: 1;
+    height: calc(100vh - 120px); /* हेडर भन्दा तलको भाग मात्र लिने */
+}
+
+/* हिन्दी र नेपाली सेक्सन - सफासँग तल मात्र स्क्रोल हुने बनाइएको र भाषा नखप्टिने */
+#hindiSection, #nepaliSection {
+    width: 50%;
+    box-sizing: border-box;
+    padding: 20px 20px 40px 20px; /* तल पर्याप्त ग्याप ताकि अन्तिम कार्ड नछेकियोस् */
+    overflow-y: auto; /* केवल यहाँ मात्र माथि-तल स्क्रोल चल्छ */
+    height: 100%;
+    -webkit-overflow-scrolling: touch; /* आईफोनमा स्मूथ स्क्रोलका लागि */
+    flex-shrink: 0;
+}
+
+/* स्क्रोलबारलाई सफा वा लुकाउनका लागि */
+#hindiSection::-webkit-scrollbar, #nepaliSection::-webkit-scrollbar {
+    width: 4px;
+}
+#hindiSection::-webkit-scrollbar-thumb, #nepaliSection::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 2px;
+}
+
+/* --- पुरानो प्रिमियम बक्स (कार्ड) डिजाइन --- */
+.story-title-card { 
+    background: var(--card-bg); 
+    border-left: 6px solid var(--red); 
+    padding: 18px 22px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 8px 22px rgba(0,0,0,0.05); 
+    border-radius: 12px; 
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.4s;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.story-title-card:active {
+    transform: scale(0.97);
+}
+
+.story-title-card h3 {
+    font-size: 20px; 
+    margin: 8px 0 0 0; 
+    font-weight: 900;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.badge { 
+    color: var(--red); 
+    display: inline-block; 
+    font-size: 14px; 
+    font-weight: 900; 
+}
+
+.snickles-font {
+    font-family: 'Snickles', cursive;
+    font-size: 26px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.bold-name { 
+    font-weight: 900; 
+    font-size: 17px; 
+    color: var(--text); 
+}
+/* थप खाली स्क्रोल हुने ठाउँ पूर्ण रूपमा हटाउन */
+#storyContainer {
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.story-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #ddd;
+    font-family: 'Mukta', sans-serif;
+    padding-bottom: 10px !important; /* फुटर मुनि धेरै खाली ठाउँ बस्न नदिन */
+}
