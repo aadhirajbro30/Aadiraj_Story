@@ -6,6 +6,33 @@
     <title>अधिराज Story</title>
     <link rel="stylesheet" href="style.css">
     <meta name="google" content="notranslate">
+
+    <!-- १. PWA का लागि अनिवार्य Meta/Link हरू -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <link rel="apple-touch-icon" href="new-logo.png">
+
+    <style>
+        /* इन्स्टल बटनको लागि स्टाइल */
+        .install-btn {
+            background-color: #d32f2f;
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            display: none; /* सुरुमा लुकेको हुन्छ, ब्राउजरले सपोर्ट गरेपछि मात्र देखिन्छ */
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+        }
+    </style>
 </head>
 <body class="day-mode">
 
@@ -13,6 +40,8 @@
         <div class="sticky-header-container">
             <header>
                 <div class="logo-text">✍🏻 अधिराज Story</div>
+                <!-- इन्स्टल बटन -->
+                <button id="pwaInstallBtn" class="install-btn" onclick="installApp()">📲 इन्स्टल</button>
             </header>
 
             <nav class="tab-nav">
@@ -29,7 +58,7 @@
                     <span class="badge">कहानी १</span>
                     <h3>वियोग का सिन्दुर</h3>
                 </div>
-                <div class="story-title-card" onclick="openStory('गरीबी  और सपनों की नींव', 'h2')">
+                <div class="story-title-card" onclick="openStory('गरीबी और सपनों की नींव', 'h2')">
                     <span class="badge">कहानी २</span>
                     <h3>गरीबी और सपनों की नींव</h3>
                 </div>
@@ -86,15 +115,12 @@
             });
         }
 
-        // नयाँ अपडेटेड फंक्शन: कथाको ID अनुसार सही एचटीएमएल पानामा रिडाइरेक्ट गर्ने
         function openStory(title, id) {
             console.log("कथा खोलियो: " + title + " (ID: " + id + ")");
             
             if (id.startsWith('h')) {
-                // हिन्दी कथा भएमा hindi-story.html मा ID पास गर्ने
                 window.location.href = `hindi-story.html?id=${id}`;
             } else if (id.startsWith('n')) {
-                // नेपाली कथा भएमा nepali-story.html मा ID पास गर्ने
                 window.location.href = `nepali-story.html?id=${id}`;
             }
         }
@@ -108,6 +134,53 @@
             if (diff > 80) switchTab(1);  
             if (diff < -80) switchTab(0); 
         }, false);
+
+
+        /* ----------------------------------------------------
+           २. PWA र INSTALL BUTTON को महत्वपूर्ण कोड
+        ---------------------------------------------------- */
+        
+        // Service Worker Register गर्ने
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(() => console.log('Service Worker Registered Successfully!'))
+                    .catch(err => console.log('Service Worker Registration Failed:', err));
+            });
+        }
+
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwaInstallBtn');
+
+        // ब्राउजरले इन्स्टल गर्न मिल्छ भन्ने थाहा पाउनासाथ यो इभेन्ट चल्छ
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // हेडरको इन्स्टल बटन देखाउने
+            if (installBtn) {
+                installBtn.style.display = 'block';
+            }
+        });
+
+        // इन्स्टल बटन क्लिक गर्दा चल्ने फन्क्सन
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User installed the PWA');
+                    }
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                });
+            }
+        }
+
+        // इन्स्टल भइसकेपछि बटन लुकाउने
+        window.addEventListener('appinstalled', () => {
+            if (installBtn) installBtn.style.display = 'none';
+            console.log('PWA is installed');
+        });
     </script>
 </body>
 </html>
