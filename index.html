@@ -6,6 +6,7 @@
     <title>अधिराज Story</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
     <meta name="google" content="notranslate">
     <link rel="apple-touch-icon" href="new-logo.png">
     <style>
@@ -48,17 +49,26 @@
     </div>
 
     <script>
-        // प्रोग्रेस बार २ सेकेन्ड (2000ms) चल्छ र सकिने बित्तिकै सिधै होम पेजमा लैजान्छ
+        // १. Service Worker Register गर्ने (PWA को लागि अनिवार्य)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker Registered Successfully!'))
+                    .catch(err => console.log('Service Worker Registration Failed:', err));
+            });
+        }
+
+        // २. लोडिङ स्क्रिन र Redirection
         window.onload = () => {
             setTimeout(() => {
                 const ls = document.getElementById('loadingScreen');
                 if (ls) {
-                    ls.style.opacity = '0'; // हल्का फेड-आउट एनिमेसन
+                    ls.style.opacity = '0';
                     setTimeout(() => {
-                        window.location.href = "home.html"; // सिधै मुख्य डाइरीमा प्रवेश
-                    }, 400); // एनिमेसन फिनिस हुन दिने समय
+                        window.location.href = "home.html";
+                    }, 400);
                 }
-            }, 2000); // २ सेकेन्डको प्रोग्रेस बार टाइमर
+            }, 2000);
         };
     </script>
 </body>
