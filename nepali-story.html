@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ne" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>कथा पढ्नुहोस्</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Mukta', 'Arial', sans-serif; 
+            line-height: 1.9; 
+            color: #333; 
+            background: #fcfbf7; 
+            padding: 75px 20px 60px 20px; 
+            transition: 0.3s; 
+            -webkit-user-select: none; 
+            user-select: none; 
+        }
+        
+        .toolbar { 
+            position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: rgba(252, 251, 247, 0.95); border-bottom: 1px solid #ddd; 
+            z-index: 1000; backdrop-filter: blur(5px); height: 45px; 
+        }
+        .btn { text-decoration: none; color: #333; border: 1px solid #ccc; padding: 6px 15px; border-radius: 5px; font-weight: bold; background: #fff; cursor: pointer; font-family: 'Mukta', sans-serif; white-space: nowrap; }
+
+        .bold-feeling { max-width: 600px; margin: 0 auto; }
+        .bold-feeling p { 
+            font-size: 22px; margin-bottom: 25px; font-weight: 900; text-align: justify; 
+            transition: background-color 0.3s; cursor: pointer; padding: 8px; border-radius: 6px;
+            scroll-margin-top: 140px; -webkit-touch-callout: none;
+        }
+        .bold-feeling p.highlighted { background-color: rgba(255, 235, 59, 0.6) !important; color: #000 !important; }
+        
+        .quote-box {
+            background-color: #f5f3e9;
+            border-left: 5px solid #5D4037;
+            padding: 18px;
+            margin: 25px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+        .dark-mode .quote-box {
+            background-color: #222;
+            border-left-color: #ffc107;
+            color: #e0e0e0;
+        }
+
+        #storyContainer {
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
+        }
+
+        .story-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+            font-family: 'Mukta', sans-serif;
+            padding-bottom: 10px !important;
+        }
+        
+        .footer-author {
+            font-size: 21px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .dark-mode .footer-author { color: #fff; }
+        
+        .footer-moral {
+            font-size: 28px; 
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: block;
+            text-align: center; 
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-thanks {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-top: 5px;
+            display: block;
+        }
+        .dark-mode .footer-thanks { color: #bbb; }
+        
+        .main-title { font-size: 30px; font-weight: 800; display: block; margin-top: 10px; color: #5D4037; text-align: center; }
+        .straight-line { width: 100%; max-width: 600px; height: 1px; background: #ddd; border: none; margin: 20px auto 30px auto; }
+        
+        .diary-image { max-width: 95%; height: auto; display: none; margin: 30px auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .bottom-action-container {
+            position: fixed; bottom: -150px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; align-items: center;
+            z-index: 2000; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bottom-action-container.show { bottom: 25px; }
+
+        .pencil-btn {
+            width: 52px; height: 52px; border-radius: 50%; background: #5D4037; color: white; font-size: 22px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.25); cursor: pointer; transition: transform 0.2s, background 0.3s;
+        }
+        .pencil-btn.active { background: #2e7d32; transform: scale(1.05); }
+
+        .action-row { display: flex; width: 100%; gap: 10px; }
+        .clear-btn, .jump-btn {
+            flex: 1; border: none; padding: 12px; border-radius: 25px; font-weight: bold; cursor: pointer; display: none; font-family: 'Mukta', sans-serif;
+        }
+        .clear-btn { background: #c62828; color: white; }
+        .jump-btn { background: #d84315; color: white; }
+
+        .toast-notification {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background-color: #323232; color: #fff; padding: 10px 20px; border-radius: 25px;
+            font-family: 'Mukta', sans-serif; z-index: 3000; transition: bottom 0.3s ease-in-out;
+        }
+        .toast-notification.show { bottom: 100px; }
+
+        .dark-mode { background-color: #121212; color: #e0e0e0; }
+        .dark-mode .toolbar { background: rgba(18, 18, 18, 0.95); border-color: #333; }
+        .dark-mode .btn { background: #1e1e1e; border-color: #333; color: #e0e0e0; }
+        .dark-mode .bold-feeling p.highlighted { background-color: rgba(255, 193, 7, 0.5) !important; color: #000 !important; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="toolbar">
+        <a href="home.html" class="btn">← back</a>
+        <button class="btn" onclick="toggleNightMode()" id="nightBtn">🌙 | नाइट मोड</button>
+    </div>
+
+    <div id="toastBox" class="toast-notification"></div>
+
+    <div class="bottom-action-container" id="actionContainer">
+        <button class="pencil-btn" id="pencilBtn" onclick="toggleHighlightMode()">✏️</button>
+        <div class="action-row">
+            <button class="clear-btn" id="clearBtn" onclick="clearBookmark()">🗑️ Clear</button>
+            <button class="jump-btn" id="jumpBtn" onclick="jumpToBookmark()">📍 Continue</button>
+        </div>
+    </div>
+
+    <div class="bold-feeling">
+        <span class="main-title" id="storyTitle">लोड हुँदैछ...</span>
+        <hr class="straight-line">
+        <img src="" alt="Story Image" class="diary-image" id="storyImage">
+        
+        <div id="storyContainer"></div>
+    </div>
+
+    <!-- नेपाली कथाहरूको डेटा लोड गरेको -->
+    <script src="nepali-story.js"></script>
+
+    <script>
+        function toggleNightMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            document.getElementById('nightBtn').innerHTML = body.classList.contains('dark-mode') ? "☀️ डे मोड" : "🌙 नाइट मोड";
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastBox');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        }
+
+        let isHighlightMode = false;
+        let lastTapTime = 0;
+        let storyKey = "";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            storyKey = id || "";
+
+            // यहाँ nepaliStories अब्जेक्ट चेक गरिएको छ
+            if (id && typeof nepaliStories !== 'undefined' && nepaliStories[id]) {
+                const story = nepaliStories[id];
+                document.getElementById('storyTitle').innerText = story.title;
+                document.title = story.title + " - अधिराज Story";
+                
+                if (story.image) {
+                    const imgEl = document.getElementById('storyImage');
+                    imgEl.src = story.image;
+                    imgEl.style.display = 'block';
+                }
+
+                const container = document.getElementById('storyContainer');
+                story.paragraphs.forEach((para, index) => {
+                    const p = document.createElement('p');
+                    p.setAttribute('data-id', 'p_' + (index + 1));
+                    p.innerHTML = para; 
+                    container.appendChild(p);
+                });
+
+                if (story.author || story.moral) {
+                    const footerDiv = document.createElement('div');
+                    footerDiv.className = 'story-footer';
+                    
+                    footerDiv.innerHTML = `
+                        <div class="footer-author"><strong>| लेखक:-</strong> ${story.author || 'अधिराज सुनार'}</div>
+                        <span class="footer-moral" style="color: ${story.moralColor || '#333'}">${story.moral || ''}</span>
+                        <div class="footer-thanks">♡ Thanks For Reading ♡</div>
+                    `;
+                    container.appendChild(footerDiv);
+                }
+
+            } else {
+                document.getElementById('storyTitle').innerText = "कथा भेटिएन";
+                document.getElementById('storyContainer').innerHTML = "<p>खोजिएको कथा फेला पार्न सकिएन।</p>";
+            }
+
+            loadSavedBookmark();
+            setupInteractions();
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('#actionContainer') || e.target.closest('.toolbar')) return;
+            let now = new Date().getTime();
+            if (now - lastTapTime < 300) document.getElementById('actionContainer').classList.toggle('show');
+            lastTapTime = now;
+        });
+
+        function toggleHighlightMode() {
+            isHighlightMode = !isHighlightMode;
+            document.getElementById('pencilBtn').classList.toggle('active');
+            if (isHighlightMode) showToast("बुकमार्क मोड अन। प्रेस गर्नुहोस्।");
+        }
+
+        function setupInteractions() {
+            document.querySelectorAll('#storyContainer p').forEach(p => {
+                let timer;
+                const start = () => { if(isHighlightMode) timer = setTimeout(() => saveBookmark(p), 1000); };
+                p.addEventListener('touchstart', start);
+                p.addEventListener('mousedown', start);
+                p.addEventListener('touchend', () => clearTimeout(timer));
+                p.addEventListener('mouseup', () => clearTimeout(timer));
+            });
+        }
+
+        function saveBookmark(p) {
+            localStorage.setItem('bookmark_' + storyKey, p.getAttribute('data-id'));
+            isHighlightMode = false;
+            document.getElementById('pencilBtn').classList.remove('active');
+            loadSavedBookmark();
+            showToast("बुकमार्क सुरक्षित भयो!");
+        }
+
+        function loadSavedBookmark() {
+            const id = localStorage.getItem('bookmark_' + storyKey);
+            const btns = [document.getElementById('jumpBtn'), document.getElementById('clearBtn')];
+            document.querySelectorAll('#storyContainer p').forEach(p => p.classList.toggle('highlighted', p.getAttribute('data-id') === id));
+            btns.forEach(b => b.style.display = id ? 'block' : 'none');
+        }
+
+        function jumpToBookmark() {
+            const id = localStorage.getItem('bookmark_' + storyKey);
+            document.querySelector(`p[data-id="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function clearBookmark() {
+            localStorage.removeItem('bookmark_' + storyKey);
+            loadSavedBookmark();
+            showToast("बुकमार्क हटाइयो!");
+        }
+    </script>
+</body>
+</html>
