@@ -1,5 +1,5 @@
 // क्यासको नाम र भर्सन (भविष्यमा केही परिवर्तन गरेमा v1 लाई v2 बनाउनुहोस्)
-const CACHE_NAME = 'aadhiraj-story-v1';
+const CACHE_NAME = 'aadhiraj-story-v2';
 
 // अफलाइनमा पनि चलाउनका लागि सेभ (Cache) गरिने फाइलहरूको सूची
 const ASSETS_TO_CACHE = [
