@@ -12,7 +12,7 @@
             line-height: 1.9; 
             color: #333; 
             background: #fcfbf7; 
-            padding: 75px 20px 60px 20px; /* बढी स्क्रोल हुन नदिन ६०px पारिएको */
+            padding: 75px 20px 60px 20px; 
             transition: 0.3s; 
             -webkit-user-select: none; 
             user-select: none; 
@@ -32,8 +32,88 @@
             scroll-margin-top: 140px; -webkit-touch-callout: none;
         }
         .bold-feeling p.highlighted { background-color: rgba(255, 235, 59, 0.6) !important; color: #000 !important; }
-        
-        /* १. कोट बक्स (Quote Box) को स्टाइल */
+
+        /* ------------------ सानो भ्वाइस/अडियो बारको स्टाइल ------------------ */
+        .audio-container {
+            max-width: 250px; /* २ देखि ३ इन्च जति सानो चौडाइ */
+            margin: 0 auto;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
+        }
+
+        .audio-container.open {
+            max-height: 70px;
+            opacity: 1;
+            margin: 15px auto 20px auto; /* खुल्दा फोटो अलिकति तल सर्छ */
+        }
+
+        .audio-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 8px 14px;
+            border-radius: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .dark-mode .audio-bar {
+            background: #1e1e1e;
+            border-color: #333;
+        }
+
+        .audio-play-btn {
+            background: #5D4037;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .audio-progress-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .audio-progress {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e0e0e0;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .dark-mode .audio-progress { background: #444; }
+
+        .audio-progress::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #5D4037;
+            cursor: pointer;
+        }
+
+        .dark-mode .audio-progress::-webkit-slider-thumb {
+            background: #ffc107;
+        }
+        /* --------------------------------------------------------------- */
+
         .quote-box {
             background-color: #f5f3e9;
             border-left: 5px solid #5D4037;
@@ -48,13 +128,11 @@
             color: #e0e0e0;
         }
 
-        /* थप खाली स्क्रोल हुने ठाउँ पूर्ण रूपमा हटाउन */
         #storyContainer {
             margin-bottom: 0px !important;
             padding-bottom: 0px !important;
         }
 
-        /* २. लेखक र धन्यवाद खण्ड (Footer) को एकदमै मिलाइएको फाइनल स्टाइल */
         .story-footer {
             margin-top: 30px;
             padding-top: 20px;
@@ -63,27 +141,24 @@
             padding-bottom: 10px !important;
         }
         
-        /* लेखकको नाम देब्रे (बायाँ) साइडमै राख्ने र सफा देखाउने */
         .footer-author {
             font-size: 21px;
             font-weight: 800;
             color: #000;
             margin-bottom: 15px;
-            text-align: left; /* देब्रे साइडमै सेट गरिएको */
+            text-align: left;
         }
         .dark-mode .footer-author { color: #fff; }
         
-        /* भद्दा ठूलो अक्षरलाई हटाएर एकदमै सुन्दर र ठिक्कको साइज बनाउने */
         .footer-moral {
-            font-size: 28px; /* साइज सानो पारेर प्रिमियम लुक दिइएको */
+            font-size: 28px;
             font-weight: 800;
             margin-bottom: 12px;
             display: block;
-            text-align: center; /* यो चाहिँ टक्क बीचमा बस्छ */
+            text-align: center;
             letter-spacing: 0.5px;
         }
         
-        /* थ्याङ्क्यु नोटलाई एकदमै कसिलो र मिलाएर राख्ने */
         .footer-thanks {
             font-size: 18px;
             font-weight: 600;
@@ -95,9 +170,9 @@
         .dark-mode .footer-thanks { color: #bbb; }
         
         .main-title { font-size: 30px; font-weight: 800; display: block; margin-top: 10px; color: #5D4037; text-align: center; }
-        .straight-line { width: 100%; max-width: 600px; height: 1px; background: #ddd; border: none; margin: 20px auto 30px auto; }
+        .straight-line { width: 100%; max-width: 600px; height: 1px; background: #ddd; border: none; margin: 20px auto 15px auto; }
         
-        .diary-image { max-width: 95%; height: auto; display: none; margin: 30px auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .diary-image { max-width: 95%; height: auto; display: none; margin: 0 auto 30px auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: margin 0.4s ease; }
         
         .bottom-action-container {
             position: fixed; bottom: -150px; left: 50%; transform: translateX(-50%);
@@ -151,6 +226,18 @@
     <div class="bold-feeling">
         <span class="main-title" id="storyTitle">लोड हो रहा है...</span>
         <hr class="straight-line">
+        
+        <!-- नयाँ अडियो बार (शीर्षक र फोटोको बिचमा) -->
+        <div class="audio-container" id="audioContainer">
+            <div class="audio-bar">
+                <button class="audio-play-btn" id="audioPlayBtn" onclick="togglePlayAudio()">▶</button>
+                <div class="audio-progress-wrapper">
+                    <input type="range" class="audio-progress" id="audioSeekBar" value="0" min="0" max="100" oninput="seekAudio(this.value)">
+                </div>
+            </div>
+            <audio id="storyAudio"></audio>
+        </div>
+
         <img src="" alt="Story Image" class="diary-image" id="storyImage">
         
         <div id="storyContainer"></div>
@@ -174,7 +261,6 @@
         }
 
         let isHighlightMode = false;
-        let lastTapTime = 0;
         let storyKey = "";
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -193,25 +279,26 @@
                     imgEl.style.display = 'block';
                 }
 
+                // अडियो सोर्स छ भने जोड्ने
+                if (story.audio) {
+                    document.getElementById('storyAudio').src = story.audio;
+                }
+
                 const container = document.getElementById('storyContainer');
                 story.paragraphs.forEach((para, index) => {
                     const p = document.createElement('p');
                     p.setAttribute('data-id', 'p_' + (index + 1));
-                    
                     p.innerHTML = para; 
-                    
                     container.appendChild(p);
                 });
 
-                // कथा सकिएपछि फुटर लोड गर्ने लजिक
                 if (story.author || story.moral) {
                     const footerDiv = document.createElement('div');
                     footerDiv.className = 'story-footer';
-                    
                     footerDiv.innerHTML = `
                         <div class="footer-author"><strong>| लेखक:-</strong> ${story.author || 'अधिराज सुनार'}</div>
                         <span class="footer-moral" style="color: ${story.moralColor || '#333'}">${story.moral || ''}</span>
-                        <div class="footer-thanks">♡ Thanks For or Reading ♡</div>
+                        <div class="footer-thanks">♡ Thanks For Reading ♡</div>
                     `;
                     container.appendChild(footerDiv);
                 }
@@ -223,14 +310,87 @@
 
             loadSavedBookmark();
             setupInteractions();
+            setupAudioEvents();
         });
 
+        // ------------------ ट्रिपल ट्याप (Triple Tap) Logic ------------------
+        let tapCount = 0;
+        let tapTimer = null;
+
         window.addEventListener('click', (e) => {
-            if (e.target.closest('#actionContainer') || e.target.closest('.toolbar')) return;
-            let now = new Date().getTime();
-            if (now - lastTapTime < 300) document.getElementById('actionContainer').classList.toggle('show');
-            lastTapTime = now;
+            if (e.target.closest('#actionContainer') || e.target.closest('.toolbar') || e.target.closest('#audioContainer')) return;
+            
+            tapCount++;
+
+            if (tapCount === 1) {
+                tapTimer = setTimeout(() => {
+                    tapCount = 0; // single tap मा केही नगर्ने
+                }, 400);
+            } else if (tapCount === 2) {
+                // डबल ट्यापमा एक्शन कन्टेनर (पेंसिल/बुकमार्क) खोल्ने
+                clearTimeout(tapTimer);
+                tapTimer = setTimeout(() => {
+                    document.getElementById('actionContainer').classList.toggle('show');
+                    tapCount = 0;
+                }, 300);
+            } else if (tapCount === 3) {
+                // ट्रिपल ट्यापमा भ्वाइस/अडियो बार खोल्ने/बन्द गर्ने
+                clearTimeout(tapTimer);
+                tapCount = 0;
+                toggleAudioPanel();
+            }
         });
+
+        function toggleAudioPanel() {
+            const audioContainer = document.getElementById('audioContainer');
+            const isOpen = audioContainer.classList.toggle('open');
+            if (isOpen) {
+                showToast("अडियो बार खुल्यो");
+            } else {
+                showToast("अडियो बार बन्द भयो");
+            }
+        }
+
+        // ------------------ अडियो प्ले/पज र प्रोग्रेस Logic ------------------
+        const audio = document.getElementById('storyAudio');
+        const playBtn = document.getElementById('audioPlayBtn');
+        const seekBar = document.getElementById('audioSeekBar');
+
+        function togglePlayAudio() {
+            if (!audio.src) {
+                showToast("यस कथाको अडियो उपलब्ध छैन");
+                return;
+            }
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "❚❚";
+            } else {
+                audio.pause();
+                playBtn.innerText = "▶";
+            }
+        }
+
+        function setupAudioEvents() {
+            audio.addEventListener('timeupdate', () => {
+                if (audio.duration) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    seekBar.value = progress;
+                }
+            });
+
+            audio.addEventListener('ended', () => {
+                playBtn.innerText = "▶";
+                seekBar.value = 0;
+            });
+        }
+
+        function seekAudio(value) {
+            if (audio.duration) {
+                audio.currentTime = (value / 100) * audio.duration;
+            }
+        }
+
+        // ---------------------------------------------------------------------
 
         function toggleHighlightMode() {
             isHighlightMode = !isHighlightMode;
