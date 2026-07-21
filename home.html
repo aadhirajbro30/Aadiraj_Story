@@ -7,13 +7,39 @@
     <link rel="stylesheet" href="style.css">
     <meta name="google" content="notranslate">
 
-    <!-- १. PWA का लागि अनिवार्य Meta/Link हरू -->
+    <!-- PWA का लागि अनिवार्य लिङ्कहरू -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
     <link rel="apple-touch-icon" href="new-logo.png">
 
     <style>
-        /* इन्स्टल बटनको लागि स्टाइल */
+        /* १. लोडिङ स्क्रिनको प्रिमियम र सफा डिजाइन */
+        #loadingScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease;
+        }
+        .loading-content { text-align: center; }
+        .progress-container {
+            width: 200px; height: 4px;
+            background: #444;
+            margin: 20px auto 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%; height: 100%;
+            background: #d32f2f;
+            animation: load 2s linear forwards;
+        }
+        @keyframes load { to { width: 100%; } }
+
+        /* २. इन्स्टल बटनको डिजाइन */
         .install-btn {
             background-color: #d32f2f;
             color: #ffffff;
@@ -24,7 +50,7 @@
             border-radius: 20px;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            display: none; /* सुरुमा लुकेको हुन्छ, ब्राउजरले सपोर्ट गरेपछि मात्र देखिन्छ */
+            display: none; /* ब्राउजरले PWA सपोर्ट गरेपछि मात्र देखिन्छ */
         }
         header {
             display: flex;
@@ -36,11 +62,22 @@
 </head>
 <body class="day-mode">
 
+    <!-- लोडिङ (Splash) स्क्रिन -->
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <h1 style="color: white; font-family: 'Georgia', serif; font-weight: 900; letter-spacing: 1px;">Aadhiraj Story</h1>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- मुख्य होमपेज -->
     <div id="homePage">
         <div class="sticky-header-container">
             <header>
                 <div class="logo-text">✍🏻 अधिराज Story</div>
-                <!-- इन्स्टल बटन -->
+                <!-- PWA इन्स्टल बटन -->
                 <button id="pwaInstallBtn" class="install-btn" onclick="installApp()">📲 इन्स्टल</button>
             </header>
 
@@ -107,6 +144,20 @@
     </div>
 
     <script>
+        // १. लोडिङ स्क्रिनको Logic (२ सेकेन्डपछि आफैं हराउने)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const ls = document.getElementById('loadingScreen');
+                if (ls) {
+                    ls.style.opacity = '0';
+                    setTimeout(() => {
+                        ls.style.display = 'none';
+                    }, 400);
+                }
+            }, 2000);
+        });
+
+        // २. ट्याब स्विच गर्ने Logic
         function switchTab(index) {
             const wrapper = document.getElementById('contentWrapper');
             wrapper.style.transform = `translateX(-${index * 50}%)`;
@@ -115,9 +166,9 @@
             });
         }
 
+        // ३. कथा खोल्ने Logic
         function openStory(title, id) {
             console.log("कथा खोलियो: " + title + " (ID: " + id + ")");
-            
             if (id.startsWith('h')) {
                 window.location.href = `hindi-story.html?id=${id}`;
             } else if (id.startsWith('n')) {
@@ -125,7 +176,7 @@
             }
         }
 
-        // स्वाइपिङ कोड
+        // ४. स्वाइपिङ Logic
         let touchStartX = 0;
         document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, false);
         document.addEventListener('touchend', e => {
@@ -135,40 +186,33 @@
             if (diff < -80) switchTab(0); 
         }, false);
 
-
-        /* ----------------------------------------------------
-           २. PWA र INSTALL BUTTON को महत्वपूर्ण कोड
-        ---------------------------------------------------- */
-        
-        // Service Worker Register गर्ने
+        // ५. Service Worker Register गर्ने
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('Service Worker Registered Successfully!'))
-                    .catch(err => console.log('Service Worker Registration Failed:', err));
+                    .then(() => console.log('Service Worker Registered!'))
+                    .catch(err => console.log('SW Registration Failed:', err));
             });
         }
 
+        // ६. PWA Install Logic
         let deferredPrompt;
         const installBtn = document.getElementById('pwaInstallBtn');
 
-        // ब्राउजरले इन्स्टल गर्न मिल्छ भन्ने थाहा पाउनासाथ यो इभेन्ट चल्छ
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // हेडरको इन्स्टल बटन देखाउने
             if (installBtn) {
                 installBtn.style.display = 'block';
             }
         });
 
-        // इन्स्टल बटन क्लिक गर्दा चल्ने फन्क्सन
         function installApp() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('User installed the PWA');
+                        console.log('App Installed!');
                     }
                     deferredPrompt = null;
                     installBtn.style.display = 'none';
@@ -176,10 +220,8 @@
             }
         }
 
-        // इन्स्टल भइसकेपछि बटन लुकाउने
         window.addEventListener('appinstalled', () => {
             if (installBtn) installBtn.style.display = 'none';
-            console.log('PWA is installed');
         });
     </script>
 </body>
