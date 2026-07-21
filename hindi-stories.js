@@ -2,7 +2,8 @@
 const hindiStories = {
     "h1": {
         title: "१. वियोग का सिन्दुर",
-        image: "fuchiii.png", // इमेज छ भने नाम राख्नुहोस्, नत्र खाली "" छोड्नुहोस्
+        image: "fuchiii.png", //
+        audio: "abhagina.mp3"
         author: "अधिराज सुनार",
         moral: "अमर सुवागन",
         moralColor: "#ff0000", // स्क्रीनशॉट जस्तै गाढा रातो रङ
