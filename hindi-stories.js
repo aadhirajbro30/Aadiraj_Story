@@ -23,6 +23,7 @@ const hindiStories = {
     "h2": {
         title: "२. गरीबी और सपनों की नींव",
         image: "dolly.png",
+        audio: "bhai.mp3", // 👈 यहाँ कम्मा (,) थपिएको छ
         author: "अधिराज सुनार",
         moral: "टुटा भरोसा",
         moralColor: "#333333",
