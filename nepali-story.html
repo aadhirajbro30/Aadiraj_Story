@@ -32,7 +32,88 @@
             scroll-margin-top: 140px; -webkit-touch-callout: none;
         }
         .bold-feeling p.highlighted { background-color: rgba(255, 235, 59, 0.6) !important; color: #000 !important; }
-        
+
+        /* ------------------ सानो भ्वाइस/अडियो बारको स्टाइल ------------------ */
+        .audio-container {
+            max-width: 250px; /* २ देखि ३ इन्च जति सानो चौडाइ */
+            margin: 0 auto;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
+        }
+
+        .audio-container.open {
+            max-height: 70px;
+            opacity: 1;
+            margin: 15px auto 20px auto; /* खुल्दा फोटो अलिकति तल सर्छ */
+        }
+
+        .audio-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 8px 14px;
+            border-radius: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .dark-mode .audio-bar {
+            background: #1e1e1e;
+            border-color: #333;
+        }
+
+        .audio-play-btn {
+            background: #5D4037;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .audio-progress-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .audio-progress {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e0e0e0;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .dark-mode .audio-progress { background: #444; }
+
+        .audio-progress::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #5D4037;
+            cursor: pointer;
+        }
+
+        .dark-mode .audio-progress::-webkit-slider-thumb {
+            background: #ffc107;
+        }
+        /* --------------------------------------------------------------- */
+
         .quote-box {
             background-color: #f5f3e9;
             border-left: 5px solid #5D4037;
@@ -70,11 +151,11 @@
         .dark-mode .footer-author { color: #fff; }
         
         .footer-moral {
-            font-size: 28px; 
+            font-size: 28px;
             font-weight: 800;
             margin-bottom: 12px;
             display: block;
-            text-align: center; 
+            text-align: center;
             letter-spacing: 0.5px;
         }
         
@@ -89,9 +170,20 @@
         .dark-mode .footer-thanks { color: #bbb; }
         
         .main-title { font-size: 30px; font-weight: 800; display: block; margin-top: 10px; color: #5D4037; text-align: center; }
-        .straight-line { width: 100%; max-width: 600px; height: 1px; background: #ddd; border: none; margin: 20px auto 30px auto; }
+        .straight-line { width: 100%; max-width: 600px; height: 1px; background: #ddd; border: none; margin: 20px auto 15px auto; }
         
-        .diary-image { max-width: 95%; height: auto; display: none; margin: 30px auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        /* ४:५ अनुपात र फोटो क्वालिटी जोगाउने स्टाइल */
+        .diary-image { 
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            display: none; 
+            margin: 0 auto 30px auto; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            transition: margin 0.4s ease; 
+        }
         
         .bottom-action-container {
             position: fixed; bottom: -150px; left: 50%; transform: translateX(-50%);
@@ -145,6 +237,18 @@
     <div class="bold-feeling">
         <span class="main-title" id="storyTitle">लोड हुँदैछ...</span>
         <hr class="straight-line">
+        
+        <!-- अडियो बार (शीर्षक र फोटोको बिचमा) -->
+        <div class="audio-container" id="audioContainer">
+            <div class="audio-bar">
+                <button class="audio-play-btn" id="audioPlayBtn" onclick="togglePlayAudio()">▶</button>
+                <div class="audio-progress-wrapper">
+                    <input type="range" class="audio-progress" id="audioSeekBar" value="0" min="0" max="100" oninput="seekAudio(this.value)">
+                </div>
+            </div>
+            <audio id="storyAudio"></audio>
+        </div>
+
         <img src="" alt="Story Image" class="diary-image" id="storyImage">
         
         <div id="storyContainer"></div>
@@ -168,7 +272,6 @@
         }
 
         let isHighlightMode = false;
-        let lastTapTime = 0;
         let storyKey = "";
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -176,16 +279,20 @@
             const id = urlParams.get('id');
             storyKey = id || "";
 
-            // यहाँ nepaliStories अब्जेक्ट चेक गरिएको छ
             if (id && typeof nepaliStories !== 'undefined' && nepaliStories[id]) {
                 const story = nepaliStories[id];
                 document.getElementById('storyTitle').innerText = story.title;
                 document.title = story.title + " - अधिराज Story";
                 
-                if (story.image) {
+                if (story.image && story.image.trim() !== "") {
                     const imgEl = document.getElementById('storyImage');
                     imgEl.src = story.image;
                     imgEl.style.display = 'block';
+                }
+
+                // अडियो सोर्स छ भने जोड्ने
+                if (story.audio) {
+                    document.getElementById('storyAudio').src = story.audio;
                 }
 
                 const container = document.getElementById('storyContainer');
@@ -199,7 +306,6 @@
                 if (story.author || story.moral) {
                     const footerDiv = document.createElement('div');
                     footerDiv.className = 'story-footer';
-                    
                     footerDiv.innerHTML = `
                         <div class="footer-author"><strong>| लेखक:-</strong> ${story.author || 'अधिराज सुनार'}</div>
                         <span class="footer-moral" style="color: ${story.moralColor || '#333'}">${story.moral || ''}</span>
@@ -210,20 +316,92 @@
 
             } else {
                 document.getElementById('storyTitle').innerText = "कथा भेटिएन";
-                document.getElementById('storyContainer').innerHTML = "<p>खोजिएको कथा फेला पार्न सकिएन।</p>";
+                document.getElementById('storyContainer').innerHTML = "<p style='text-align:center;'>खोजिएको कथा फेला पार्न सकिएन।</p>";
             }
 
             loadSavedBookmark();
             setupInteractions();
+            setupAudioEvents();
         });
+
+        // ------------------ ट्रिपल ट्याप (Triple Tap) Logic ------------------
+        let tapCount = 0;
+        let tapTimer = null;
 
         window.addEventListener('click', (e) => {
-            if (e.target.closest('#actionContainer') || e.target.closest('.toolbar')) return;
-            let now = new Date().getTime();
-            if (now - lastTapTime < 300) document.getElementById('actionContainer').classList.toggle('show');
-            lastTapTime = now;
+            if (e.target.closest('#actionContainer') || e.target.closest('.toolbar') || e.target.closest('#audioContainer')) return;
+            
+            tapCount++;
+
+            if (tapCount === 1) {
+                tapTimer = setTimeout(() => {
+                    tapCount = 0; // single tap मा केही नगर्ने
+                }, 400);
+            } else if (tapCount === 2) {
+                // डबल ट्यापमा एक्शन कन्टेनर (पेंसिल/बुकमार्क) खोल्ने
+                clearTimeout(tapTimer);
+                tapTimer = setTimeout(() => {
+                    document.getElementById('actionContainer').classList.toggle('show');
+                    tapCount = 0;
+                }, 300);
+            } else if (tapCount === 3) {
+                // ट्रिपल ट्यापमा भ्वाइस/अडियो बार खोल्ने/बन्द गर्ने
+                clearTimeout(tapTimer);
+                tapCount = 0;
+                toggleAudioPanel();
+            }
         });
 
+        function toggleAudioPanel() {
+            const audioContainer = document.getElementById('audioContainer');
+            const isOpen = audioContainer.classList.toggle('open');
+            if (isOpen) {
+                showToast("अडियो बार खुल्यो");
+            } else {
+                showToast("अडियो बार बन्द भयो");
+            }
+        }
+
+        // ------------------ अडियो प्ले/पज र प्रोग्रेस Logic ------------------
+        const audio = document.getElementById('storyAudio');
+        const playBtn = document.getElementById('audioPlayBtn');
+        const seekBar = document.getElementById('audioSeekBar');
+
+        function togglePlayAudio() {
+            if (!audio.src) {
+                showToast("यस कथाको अडियो उपलब्ध छैन");
+                return;
+            }
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "❚❚";
+            } else {
+                audio.pause();
+                playBtn.innerText = "▶";
+            }
+        }
+
+        function setupAudioEvents() {
+            audio.addEventListener('timeupdate', () => {
+                if (audio.duration) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    seekBar.value = progress;
+                }
+            });
+
+            audio.addEventListener('ended', () => {
+                playBtn.innerText = "▶";
+                seekBar.value = 0;
+            });
+        }
+
+        function seekAudio(value) {
+            if (audio.duration) {
+                audio.currentTime = (value / 100) * audio.duration;
+            }
+        }
+
+        // ------------------ बुकमार्क Logic ------------------
         function toggleHighlightMode() {
             isHighlightMode = !isHighlightMode;
             document.getElementById('pencilBtn').classList.toggle('active');
@@ -234,7 +412,7 @@
             document.querySelectorAll('#storyContainer p').forEach(p => {
                 let timer;
                 const start = () => { if(isHighlightMode) timer = setTimeout(() => saveBookmark(p), 1000); };
-                p.addEventListener('touchstart', start);
+                p.addEventListener('touchstart', start, {passive: true});
                 p.addEventListener('mousedown', start);
                 p.addEventListener('touchend', () => clearTimeout(timer));
                 p.addEventListener('mouseup', () => clearTimeout(timer));
