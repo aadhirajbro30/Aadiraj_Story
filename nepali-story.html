@@ -86,8 +86,8 @@
         <div id="storyContainer"></div>
     </div>
 
-    <!-- JS फाइल लिंक गरिएको -->
-    <script src="NepaliStory.js"></script>
+    <!-- सच्याइएको JS फाइल नाम -->
+    <script src="nepali-story.js"></script>
 
     <script>
         function toggleNightMode() {
@@ -106,7 +106,8 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            storyKey = urlParams.get('id') || "";
+            // URL मा id नभए स्वतः 'n1' कथा देखाउनेछ
+            storyKey = urlParams.get('id') || "n1"; 
 
             if (storyKey && typeof nepaliStories !== 'undefined' && nepaliStories[storyKey]) {
                 const story = nepaliStories[storyKey];
@@ -120,6 +121,8 @@
                 if (story.audio) document.getElementById('storyAudio').src = story.audio;
 
                 const container = document.getElementById('storyContainer');
+                container.innerHTML = ""; // पुरानो डाटा सफा गर्न
+
                 story.paragraphs.forEach((para, index) => {
                     const p = document.createElement('p');
                     p.setAttribute('data-id', 'p_' + (index + 1));
@@ -239,3 +242,4 @@
     </script>
 </body>
 </html>
+
