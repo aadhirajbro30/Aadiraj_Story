@@ -93,9 +93,9 @@ const nepaliStories = {
 
     "n5": {
         title: "५. बाजेको त्यो पुरानो चिठी",
-        image: "yui.mp3", 
+        image: "", 
         author: "अधिराज सुनार",
-        audio: "",
+        audio: "yui.mp3",
         moral: "कतिपय कहानीहरू अधुरो भएर पनि पूर्ण कहानीभन्दा बढी मूल्यवान् हुन्छन्।",
         moralColor: "#e65100",
         paragraphs: [
