@@ -139,7 +139,8 @@
                     <span class="badge">कथा ८</span>
                     <h3>सपना यात्रा</h3>
                 </div>
-                <div class="story-title-card" onclick="openStory2('निलो फूल', 'n9')">
+                <!-- यहाँ openStory2 लाई openStory बनाइएको छ -->
+                <div class="story-title-card" onclick="openStory('निलो फूल', 'n9')">
                     <span class="badge">कथा ९</span>
                     <h3>निलो फूल</h3>
                 </div>
@@ -206,7 +207,7 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-פ            if (installBtn) {
+            if (installBtn) {
                 installBtn.style.display = 'block';
             }
         });
