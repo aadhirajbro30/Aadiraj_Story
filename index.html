@@ -58,7 +58,7 @@
             });
         }
 
-        // २. लोडिङ स्क्रिन र Redirection
+        // २. लोडिङ स्क्रिन र Redirection (भेरिफिकेसनका लागि समय बढाइएको छ)
         window.onload = () => {
             setTimeout(() => {
                 const ls = document.getElementById('loadingScreen');
@@ -68,7 +68,7 @@
                         window.location.href = "home.html";
                     }, 400);
                 }
-            }, 2000);
+            }, 30000); // Monetag ले चेक गर्न पाओस् भनेर ३० सेकेन्ड बनाइएको छ
         };
     </script>
 </body>
