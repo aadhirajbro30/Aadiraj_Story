@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>अधिराज Story</title>
+    
+    <!-- Monetag Verification Meta Tag -->
+    <meta name="monetag" content="29c8871d067c04a96b1c42a9d6004669">
+
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
@@ -58,7 +62,7 @@
             });
         }
 
-        // २. लोडिङ स्क्रिन र Redirection (भेरिफिकेसनका लागि समय बढाइएको छ)
+        // २. लोडिङ स्क्रिन र Redirection (भेरिफिकेसनका लागि समय ३० सेकेन्ड बनाइएको छ)
         window.onload = () => {
             setTimeout(() => {
                 const ls = document.getElementById('loadingScreen');
@@ -68,7 +72,7 @@
                         window.location.href = "home.html";
                     }, 400);
                 }
-            }, 30000); // Monetag ले चेक गर्न पाओस् भनेर ३० सेकेन्ड बनाइएको छ
+            }, 30000); 
         };
     </script>
 </body>
