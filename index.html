@@ -139,7 +139,6 @@
                     <span class="badge">कथा ८</span>
                     <h3>सपना यात्रा</h3>
                 </div>
-                <!-- यहाँ openStory2 लाई openStory बनाइएको छ -->
                 <div class="story-title-card" onclick="openStory('निलो फूल', 'n9')">
                     <span class="badge">कथा ९</span>
                     <h3>निलो फूल</h3>
@@ -149,7 +148,7 @@
     </div>
 
     <script>
-        // १. लोडिङ स्क्रिनको Logic (२ सेकेन्डपछि आफैं हराउने र होमपेज देखाउने)
+        // १. लोडिङ स्क्रिनको Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const ls = document.getElementById('loadingScreen');
@@ -191,16 +190,7 @@
             if (diff < -80) switchTab(0); 
         }, false);
 
-        // ५. Service Worker Register गर्ने
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('Service Worker Registered!'))
-                    .catch(err => console.log('SW Registration Failed:', err));
-            });
-        }
-
-        // ६. PWA Install Logic
+        // ५. PWA Install Logic
         let deferredPrompt;
         const installBtn = document.getElementById('pwaInstallBtn');
 
